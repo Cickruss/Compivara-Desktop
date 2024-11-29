@@ -51,18 +51,18 @@ public class ServiceLexer : IServiceLexer
             char c = Advance();
             switch (c)
             {
-                case '(': AddToken(TokenType.LEFT_PAREN); break;
-                case ')': AddToken(TokenType.RIGHT_PAREN); break;
-                case '{': AddToken(TokenType.LEFT_BRACE); break;
-                case '}': AddToken(TokenType.RIGHT_BRACE); break;
-                case '+': AddToken(TokenType.PLUS); break;
-                case '-': AddToken(TokenType.MINUS); break;
-                case '*': AddToken(TokenType.MULTIPLY); break;
-                case '/': AddToken(TokenType.DIVIDE); break;
-                case '=': AddToken(TokenType.EQUALS); break;
-                case '<': AddToken(TokenType.LESS_THAN); break;
-                case '>': AddToken(TokenType.GREATER_THAN); break;
-                case ';': AddToken(TokenType.SEMICOLON); break;
+                case '(': AddToken(TokenType.PARENTESE_ESQUERDO); break;
+                case ')': AddToken(TokenType.PARENTESE_DIREITO); break;
+                case '{': AddToken(TokenType.CHAVE_ESQUERDA); break;
+                case '}': AddToken(TokenType.CHAVE_DIREITA); break;
+                case '+': AddToken(TokenType.ADICAO); break;
+                case '-': AddToken(TokenType.MENOS); break;
+                case '*': AddToken(TokenType.MULTIPLICACAO); break;
+                case '/': AddToken(TokenType.DIVISAO); break;
+                case '=': AddToken(TokenType.IGUAL); break;
+                case '<': AddToken(TokenType.MENOR_QUE); break;
+                case '>': AddToken(TokenType.MAIOR_QUE); break;
+                case ';': AddToken(TokenType.PONTO_E_VIRGULA); break;
                 case ' ':
                 case '\r':
                 case '\t': break;
@@ -86,12 +86,12 @@ public class ServiceLexer : IServiceLexer
             {
                 Advance(); // Consume the '.'
                 while (char.IsDigit(Peek())) Advance();
-                AddToken(TokenType.NUMBER, 
+                AddToken(TokenType.NUMERO, 
                     double.Parse(_source.Substring(_start, _current - _start)));
             }
             else
             {
-                AddToken(TokenType.NUMBER, 
+                AddToken(TokenType.NUMERO, 
                     int.Parse(_source.Substring(_start, _current - _start)));
             }
         }
@@ -103,7 +103,7 @@ public class ServiceLexer : IServiceLexer
             string text = _source.Substring(_start, _current - _start);
             TokenType type = _keywords.TryGetValue(text, out var keyword) 
                 ? keyword 
-                : TokenType.IDENTIFIER;
+                : TokenType.IDENTIFICADOR;
 
             AddToken(type);
         }

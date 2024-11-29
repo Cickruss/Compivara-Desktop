@@ -34,19 +34,19 @@ public class ServiceParser : IServiceParser
     private void ParseVariableDeclaration()
     {
         // Implementação simplificada de declaração de variáveis
-        Consume(TokenType.IDENTIFIER, "Expect variable name");
-        if (Match(TokenType.EQUALS))
+        Consume(TokenType.IDENTIFICADOR, "Expect variable name");
+        if (Match(TokenType.IGUAL))
         {
             ParseExpression();
         }
-        Consume(TokenType.SEMICOLON, "Expect ';' after variable declaration");
+        Consume(TokenType.PONTO_E_VIRGULA, "Expect ';' after variable declaration");
     }
 
     private void ParseIfStatement()
     {
-        Consume(TokenType.LEFT_PAREN, "Expect '(' after 'if'");
+        Consume(TokenType.PARENTESE_ESQUERDO, "Expect '(' after 'if'");
         ParseExpression();
-        Consume(TokenType.RIGHT_PAREN, "Expect ')' after condition");
+        Consume(TokenType.PARENTESE_DIREITO, "Expect ')' after condition");
         ParseStatement();
         if (Match(TokenType.ELSE))
         {
@@ -56,16 +56,16 @@ public class ServiceParser : IServiceParser
 
     private void ParseWhileStatement()
     {
-        Consume(TokenType.LEFT_PAREN, "Expect '(' after 'while'");
+        Consume(TokenType.PARENTESE_ESQUERDO, "Expect '(' after 'while'");
         ParseExpression();
-        Consume(TokenType.RIGHT_PAREN, "Expect ')' after condition");
+        Consume(TokenType.PARENTESE_DIREITO, "Expect ')' after condition");
         ParseStatement();
     }
 
     private void ParsePrintStatement()
     {
         ParseExpression();
-        Consume(TokenType.SEMICOLON, "Expect ';' after value");
+        Consume(TokenType.PONTO_E_VIRGULA, "Expect ';' after value");
     }
 
     private void ParseExpression()
@@ -75,7 +75,7 @@ public class ServiceParser : IServiceParser
 
     private void ParseArithmeticExpression()
     {
-        while (Match(TokenType.PLUS, TokenType.MINUS, TokenType.MULTIPLY, TokenType.DIVIDE))
+        while (Match(TokenType.ADICAO, TokenType.MENOS, TokenType.MULTIPLICACAO, TokenType.DIVISAO))
         {
             Token @operator = Previous();
             ParseArithmeticExpression();

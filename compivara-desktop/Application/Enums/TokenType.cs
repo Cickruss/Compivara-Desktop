@@ -2,19 +2,24 @@
 
 public enum TokenType
 {
-    // Palavras-chave
+    #region PALAVRAS CHAVES
     IF, ELSE, WHILE, INT, FLOAT, PRINT, READ,
-        
-    // Operadores
-    PLUS, MINUS, MULTIPLY, DIVIDE, 
-    EQUALS, LESS_THAN, GREATER_THAN,
-        
-    // Literais e identificadores
-    NUMBER, IDENTIFIER, 
-        
-    // Símbolos de pontuação
-    LEFT_PAREN, RIGHT_PAREN, 
-    LEFT_BRACE, RIGHT_BRACE,
-    SEMICOLON,
+    #endregion
+
+    #region OPERADORES
+    ADICAO, MENOS, MULTIPLICACAO, DIVISAO, 
+    IGUAL, MENOR_QUE, MAIOR_QUE,
+    #endregion
+
+    #region LITERIAS E IDENTIFICADORES
+    NUMERO, IDENTIFICADOR, 
+    #endregion
+
+    #region SIMBOLOS E PONTUAÇÕES
+    PARENTESE_ESQUERDO, PARENTESE_DIREITO, 
+    CHAVE_ESQUERDA, CHAVE_DIREITA,
+    PONTO_E_VIRGULA,
+    #endregion
+    
     EOF
 }
