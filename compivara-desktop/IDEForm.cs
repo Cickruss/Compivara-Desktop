@@ -1,3 +1,4 @@
+using compivara_desktop.Application.Enums;
 using compivara_desktop.Application.Ports.Services;
 namespace compivara_desktop;
 
@@ -18,21 +19,28 @@ public partial class IDEForm : Form
             lstTokens.Items.Clear();
             
             string sourceCode = txtCode.Text;
-            var result = _compilerService.Compile(sourceCode);
-
-            lblResultMessage.Text = result.Message;
-
-            lstTokens.Items.Clear();
-
-            foreach (var token in result.Tokens)
-            {
-                lstTokens.Items.Add($"{token.Type}: {token.Lexeme}");
-            }
             
+            var result = _compilerService.Compile(sourceCode);
+            
+            lblResultMessage.Text = result.Message;
+            
+            if (result.Tokens != null && result.Tokens.Count > 0)
+            {
+                foreach (var token in result.Tokens)
+                {
+                    if (token.Type == TokenType.EOF) break;
+                    lstTokens.Items.Add($"{token.Type}: {token.Lexeme}");
+                }
+            }
+            else
+            {
+                lstTokens.Items.Add("Nenhum token gerado.");
+            }
         }
         catch (Exception ex)
         {
             MessageBox.Show($"Erro na compilação: {ex.Message}");
         }
     }
+
 }

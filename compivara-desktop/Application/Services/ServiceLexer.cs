@@ -7,10 +7,11 @@ namespace compivara_desktop.Application.Services;
 public class ServiceLexer : IServiceLexer
 {
         private string _source;
-        private readonly List<Token> _tokens = new List<Token>();
+        private List<Token> _tokens = new List<Token>();
         private int _start = 0;
         private int _current = 0;
         private int _line = 1;
+
 
         private static readonly Dictionary<string, TokenType> _keywords = new Dictionary<string, TokenType>
         {
@@ -30,6 +31,11 @@ public class ServiceLexer : IServiceLexer
 
         public List<Token> ScanTokens()
         {
+            _start = 0;
+            _current = 0;
+            _line = 1;
+            _tokens = new List<Token>();
+            
             while (!IsAtEnd())
             {
                 _start = _current;

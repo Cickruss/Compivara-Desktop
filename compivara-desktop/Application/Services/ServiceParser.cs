@@ -8,7 +8,6 @@ public class ServiceParser : IServiceParser
 {
     private List<Token> _tokens;
     private int _current = 0;
-
     public void AddTokens(List<Token> tokens)
     {
         _tokens = tokens;
@@ -16,6 +15,7 @@ public class ServiceParser : IServiceParser
 
     public void Parse()
     {
+        _current = 0;
         while (!IsAtEnd())
         {
             ParseStatement();
