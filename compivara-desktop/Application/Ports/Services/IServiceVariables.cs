@@ -3,7 +3,7 @@ using compivara_desktop.Application.Models;
 
 namespace compivara_desktop.Application.Ports.Services;
 
-public interface IServiceSemantic
+public interface IServiceVariables
 {
     public void AnalyzeVariableDeclaration(Token typeToken, Token identifierToken, Token ValueToken);
 

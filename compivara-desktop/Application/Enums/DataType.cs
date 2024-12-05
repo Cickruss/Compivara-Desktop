@@ -5,6 +5,7 @@ public enum DataType
     #region TIPOS
     Integer,
     Float,
+    Boolean,
     Undefined
     #endregion
 }

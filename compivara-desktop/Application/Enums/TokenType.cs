@@ -3,7 +3,7 @@
 public enum TokenType
 {
     #region PALAVRAS CHAVES
-    IF, ELSE, WHILE, TYPE_INT, TYPE_FLOAT, PRINT, READ,
+    SE, SENAO, ENQUANTO, INTEIRO, FLUTUANTE, MOSTRE, LEIA, BOOLEANO, TRUE, FALSE,
     #endregion
 
     #region OPERADORES

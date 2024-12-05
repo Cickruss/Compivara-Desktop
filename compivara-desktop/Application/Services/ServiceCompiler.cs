@@ -7,20 +7,20 @@ public class ServiceCompiler : IServiceCompiler
 {
     private readonly IServiceLexer _serviceLexer;
     private readonly IServiceParser _serviceParser;
-    private readonly IServiceSemantic _serviceSemantic;
+    private readonly IServiceVariables _serviceVariables;
 
-    public ServiceCompiler(IServiceLexer serviceLexer, IServiceParser serviceParser, IServiceSemantic serviceSemantic)
+    public ServiceCompiler(IServiceLexer serviceLexer, IServiceParser serviceParser, IServiceVariables serviceVariables)
     {
         _serviceLexer = serviceLexer;
         _serviceParser = serviceParser;
-        _serviceSemantic = serviceSemantic;
+        _serviceVariables = serviceVariables;
     }
     public CompilationResult Compile(string sourceCode)
     {
         var result = new CompilationResult();
         try 
         {
-            _serviceSemantic.Reset();
+            _serviceVariables.Reset();
             _serviceLexer.AddSourceCode(sourceCode);
             var tokens = _serviceLexer.ScanTokens();
             

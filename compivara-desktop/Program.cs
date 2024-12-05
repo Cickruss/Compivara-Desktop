@@ -12,7 +12,7 @@ static class Program
         var serviceProvider = new ServiceCollection()
             .AddSingleton<IServiceLexer, ServiceLexer>()
             .AddSingleton<IServiceParser, ServiceParser>()
-            .AddSingleton<IServiceSemantic, ServiceSemantic>()
+            .AddSingleton<IServiceVariables, ServiceVariables>()
             .AddSingleton<IServiceCompiler, ServiceCompiler>()
             .AddScoped<IDEForm>()
             .BuildServiceProvider();

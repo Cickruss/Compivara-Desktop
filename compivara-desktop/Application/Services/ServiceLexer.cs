@@ -15,20 +15,19 @@ public class ServiceLexer : IServiceLexer
 
     private static readonly Dictionary<string, TokenType> _keywords = new Dictionary<string, TokenType>
     {
-        { "if", TokenType.IF },
-        { "else", TokenType.ELSE },
-        { "while", TokenType.WHILE },
-        { "int", TokenType.TYPE_INT },
-        { "float", TokenType.TYPE_FLOAT },
-        { "print", TokenType.PRINT },
-        { "read", TokenType.READ }
+        { "se", TokenType.SE },
+        { "senao", TokenType.SENAO },
+        { "enquanto", TokenType.ENQUANTO },
+        { "inteiro", TokenType.INTEIRO },
+        { "flutuante", TokenType.FLUTUANTE },
+        { "mostre", TokenType.MOSTRE },
+        { "leia", TokenType.LEIA }
     };
 
     public void AddSourceCode(string source)
     {
         _source = source;
     }
-
     public List<Token> ScanTokens()
     {
         _start = 0;
@@ -45,7 +44,6 @@ public class ServiceLexer : IServiceLexer
         _tokens.Add(new Token(TokenType.EOF, "", null, _line));
         return _tokens;
     }
-
     private void ScanToken()
     {
         char c = Advance();
@@ -73,11 +71,10 @@ public class ServiceLexer : IServiceLexer
                 else if (char.IsLetter(c))
                     Identifier();
                 else
-                    throw new Exception($"Unexpected character at line {_line}");
+                    throw new Exception($"Caractere inesperado na linha {_line}");
                 break;
         }
     }
-
     private void Number()
     {
         while (char.IsDigit(Peek())) Advance();
@@ -96,9 +93,6 @@ public class ServiceLexer : IServiceLexer
             AddToken(TokenType.NUMERO, int.Parse(numberLiteral, CultureInfo.InvariantCulture));
         }
     }
-
-
-
     private void Identifier()
     {
         while (char.IsLetterOrDigit(Peek())) Advance();
@@ -110,7 +104,6 @@ public class ServiceLexer : IServiceLexer
 
         AddToken(type);
     }
-
     private bool IsAtEnd() => _current >= _source.Length;
     private char Advance() => _source[_current++];
     private char Peek() => IsAtEnd() ? '\0' : _source[_current];
@@ -122,7 +115,7 @@ public class ServiceLexer : IServiceLexer
 
         if (type != TokenType.IDENTIFICADOR)
         {
-            _tokens.Add(new Token(type, text.ToLower(), literal, _line));
+            _tokens.Add(new Token(type, text.ToUpper(), literal, _line));
         }
         else
         {

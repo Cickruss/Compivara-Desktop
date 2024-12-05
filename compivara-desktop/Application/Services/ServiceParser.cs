@@ -4,10 +4,10 @@ using compivara_desktop.Application.Ports.Services;
 
 namespace compivara_desktop.Application.Services;
 
-public class ServiceParser(IServiceSemantic _semantic) : IServiceParser
+public class ServiceParser(IServiceVariables variables) : IServiceParser
 {
-    private readonly IServiceSemantic _semanticAnalyzer = _semantic;
-    
+    private readonly IServiceVariables _variablesService = variables;
+
     private List<Token> _tokens;
     private int _current = 0;
 
@@ -24,104 +24,102 @@ public class ServiceParser(IServiceSemantic _semantic) : IServiceParser
             ParseStatement();
         }
     }
-
     private void ParseStatement()
     {
-        if (Match(TokenType.PRINT)) ParsePrintStatement();
-        else if (Match(TokenType.READ)) ParseReadStatement();
-        else if (Match(TokenType.IF)) ParseIfStatement();
-        else if (Match(TokenType.WHILE)) ParseWhileStatement();
-        else if (Match(TokenType.TYPE_INT, TokenType.TYPE_FLOAT)) ParseVariableDeclaration();
+        if (Match(TokenType.MOSTRE)) ParsePrintStatement();
+        else if (Match(TokenType.LEIA)) ParseReadStatement();
+        else if (Match(TokenType.SE)) ParseIfStatement();
+        else if (Match(TokenType.ENQUANTO)) ParseWhileStatement();
+        else if (Match(TokenType.INTEIRO, TokenType.FLUTUANTE)) ParseVariableDeclaration();
         else if (Match(TokenType.IDENTIFICADOR)) ParseAssignmentStatement();
-        else throw new Exception($"Unexpected token: {Peek().Lexeme}");
+        else throw new Exception($"Token inesperado: {Peek().Lexeme} na linha {Peek().Line}");
     }
-
     private void ParsePrintStatement()
     {
-        ParseExpression();
-        Consume(TokenType.PONTO_E_VIRGULA, "Expect ';' after print statement");
+        Token token = Peek();
+    
+        if (Match(TokenType.IDENTIFICADOR))
+        {
+            Token identifierToken = Previous();
+            _variablesService.AnalyzeVariableUsage(identifierToken);
+            Consume(TokenType.PONTO_E_VIRGULA, "Esperado ';' após a instrução 'mostre'");
+        }
+        else if (Match(TokenType.NUMERO))
+        {
+            Consume(TokenType.PONTO_E_VIRGULA, "Esperado ';' após a instrução 'mostre'");
+        }
+        else
+        {
+            throw new Exception($"Esperado número ou variável após 'mostre' na linha {token.Line}");
+        }
     }
-
     private void ParseReadStatement()
     {
-        Consume(TokenType.IDENTIFICADOR, "Expect variable name after 'read'");
-        Consume(TokenType.PONTO_E_VIRGULA, "Expect ';' after read statement");
+        Token token = Peek();
+        Consume(TokenType.PONTO_E_VIRGULA, "Esperado ';' após 'leia'");
     }
-
     private void ParseIfStatement()
     {
-        Consume(TokenType.PARENTESE_ESQUERDO, "Expect '(' after 'if'");
         ParseExpression();
-        Consume(TokenType.PARENTESE_DIREITO, "Expect ')' after condition");
         ParseBlock();
-        if (Match(TokenType.ELSE))
+        if (Match(TokenType.SENAO))
         {
             ParseBlock();
         }
     }
-
     private void ParseWhileStatement()
     {
-        Consume(TokenType.PARENTESE_ESQUERDO, "Expect '(' after 'while'");
         ParseExpression();
-        Consume(TokenType.PARENTESE_DIREITO, "Expect ')' after condition");
         ParseBlock();
     }
-
     private void ParseVariableDeclaration()
     {
         Token typeToken = Previous();
         Token identifierToken = Peek();
-        
-        Consume(TokenType.IDENTIFICADOR, "Expect variable name");
+
+        Consume(TokenType.IDENTIFICADOR, "Esperado o nome da variável");
         if (Match(TokenType.IGUAL))
         {
             Token valueToken = Peek();
             var literalType = valueToken.Literal is int ? DataType.Integer : DataType.Float;
-            if (valueToken.Type == TokenType.NUMERO)
+            if (valueToken.Type == TokenType.NUMERO && typeToken.Type == TokenType.INTEIRO)
             {
-                switch (typeToken.Type)
-                {
-                    case TokenType.TYPE_INT:
-                        _semanticAnalyzer.VerifyTypeCompatibility(DataType.Integer, literalType, identifierToken.Lexeme, valueToken.Line);
-                        _semanticAnalyzer.AnalyzeVariableDeclaration(typeToken, identifierToken, valueToken);
-                        break;
-                    case TokenType.TYPE_FLOAT:
-                        _semanticAnalyzer.VerifyTypeCompatibility(DataType.Float, literalType, identifierToken.Lexeme, valueToken.Line);
-                        _semanticAnalyzer.AnalyzeVariableDeclaration(typeToken, identifierToken, valueToken);
-                        break;
-                }
+                _variablesService.VerifyTypeCompatibility(DataType.Integer, literalType, identifierToken.Lexeme, valueToken.Line);
+                _variablesService.AnalyzeVariableDeclaration(typeToken, identifierToken, valueToken);
             }
             ParseExpression();
         }
-        Consume(TokenType.PONTO_E_VIRGULA, "Expect ';' after variable declaration.");
+        Consume(TokenType.PONTO_E_VIRGULA, "Esperado ';' após a declaração da variável");
     }
-    
     private void ParseAssignmentStatement()
     {
         Token identifierToken = Previous();
         
-        _semanticAnalyzer.AnalyzeVariableUsage(identifierToken);
-
-        Consume(TokenType.IGUAL, "Expect '=' after variable.");
-        
-        var declaredType = _semanticAnalyzer.GetVariableType(identifierToken);
+        _variablesService.AnalyzeVariableUsage(identifierToken);
+        Consume(TokenType.IGUAL, "Esperado '=' após o nome da variável");
         
         Token valueToken = Peek();
-        DataType valueType = DetermineValueType(valueToken);
-        
-        _semanticAnalyzer.VerifyTypeCompatibility(
-            declaredType,
-            valueType,
-            identifierToken.Lexeme,
-            valueToken.Line
-        );
-        
-        ParseExpression();
 
-        Consume(TokenType.PONTO_E_VIRGULA, "Expect ';' after expression.");
+        if (Match(TokenType.LEIA))
+        {
+            Consume(TokenType.PONTO_E_VIRGULA, "Esperado ';' após 'leia'");
+        }
+        else
+        {
+            DataType valueType = DetermineValueType(valueToken);
+            var declaredType = _variablesService.GetVariableType(identifierToken);
+            
+            _variablesService.VerifyTypeCompatibility(
+                declaredType,
+                valueType,
+                identifierToken.Lexeme,
+                valueToken.Line
+            );
+            
+            ParseExpression();
+            Consume(TokenType.PONTO_E_VIRGULA, "Esperado ';' após a expressão");
+        }
     }
-    
     private DataType DetermineValueType(Token valueToken)
     {
         if (valueToken.Type == TokenType.NUMERO)
@@ -135,20 +133,41 @@ public class ServiceParser(IServiceSemantic _semantic) : IServiceParser
                 return DataType.Float;
             }
         }
+        else if (valueToken.Type == TokenType.BOOLEANO)
+        {
+            return DataType.Boolean;
+        }
 
-        throw new Exception($"Unsupported value type for token '{valueToken.Lexeme}'");
+        throw new Exception($"Tipo de valor não suportado para o token '{valueToken.Lexeme}' na linha {valueToken.Line}");
     }
-
+    private void ParseFactor()
+    {
+        if (Match(TokenType.NUMERO)) return;
+        if (Match(TokenType.BOOLEANO)) return;
+        if (Match(TokenType.IDENTIFICADOR)) return;
+        if (Match(TokenType.LEIA)) return;
+        if (Match(TokenType.PARENTESE_ESQUERDO))
+        {
+            ParseExpression();
+            Consume(TokenType.PARENTESE_DIREITO, "Esperado ')' após a expressão");
+            return;
+        }
+        throw new Exception($"Caractere inesperado na linha {Peek().Line}");
+    }
     private void ParseExpression()
     {
         ParseTerm();
-        while (Match(TokenType.ADICAO, TokenType.MENOS))
+
+        while (Match(TokenType.ADICAO, TokenType.MENOS, TokenType.MENOR_QUE, TokenType.MAIOR_QUE, TokenType.IGUAL))
         {
-            Previous();
+            Token operatorToken = Previous();
+            if (operatorToken.Type == TokenType.IGUAL && !Match(TokenType.IGUAL))
+            {
+                throw new Exception($"Sintaxe inválida: Esperado '==' para comparação de igualdade na linha {operatorToken.Line}");
+            }
             ParseTerm();
         }
     }
-
     private void ParseTerm()
     {
         ParseFactor();
@@ -158,23 +177,15 @@ public class ServiceParser(IServiceSemantic _semantic) : IServiceParser
             ParseFactor();
         }
     }
-
-    private void ParseFactor()
-    {
-        if (Match(TokenType.NUMERO)) return;
-        throw new Exception("Expected number");
-    }
-
     private void ParseBlock()
     {
-        Consume(TokenType.COLCHETE_ESQUERDO, "Expect '[' before block code");
+        Consume(TokenType.COLCHETE_ESQUERDO, "Esperado '[' antes do bloco de código");
         while (!Check(TokenType.COLCHETE_DIREITO) && !IsAtEnd())
         {
             ParseStatement();
         }
-        Consume(TokenType.COLCHETE_DIREITO, "Expect ']' after block");
+        Consume(TokenType.COLCHETE_DIREITO, "Esperado ']' após o bloco");
     }
-
     private bool Match(params TokenType[] types)
     {
         foreach (var type in types)
@@ -187,30 +198,25 @@ public class ServiceParser(IServiceSemantic _semantic) : IServiceParser
         }
         return false;
     }
-
     private bool Check(TokenType type)
     {
         if (IsAtEnd()) return false;
         return Peek().Type == type;
     }
-
     private Token Advance()
     {
         if (!IsAtEnd()) _current++;
         return Previous();
     }
-
     private bool IsAtEnd()
     {
         return Peek().Type == TokenType.EOF;
     }
-
     private Token Peek() => _tokens[_current];
     private Token Previous() => _tokens[_current - 1];
-
     private Token Consume(TokenType type, string message)
     {
         if (Check(type)) return Advance();
-        throw new Exception(message);
+        throw new Exception($"{message} na linha {Peek().Line}");
     }
 }
