@@ -10,10 +10,10 @@ static class Program
     static void Main()
     {
         var serviceProvider = new ServiceCollection()
-            .AddScoped<IServiceLexer, ServiceLexer>()
-            .AddScoped<IServiceParser, ServiceParser>()
-            .AddScoped<IServiceSemantic, ServiceSemantic>()
-            .AddScoped<IServiceCompiler, ServiceCompiler>()
+            .AddSingleton<IServiceLexer, ServiceLexer>()
+            .AddSingleton<IServiceParser, ServiceParser>()
+            .AddSingleton<IServiceVariables, ServiceVariables>()
+            .AddSingleton<IServiceCompiler, ServiceCompiler>()
             .AddScoped<IDEForm>()
             .BuildServiceProvider();
         

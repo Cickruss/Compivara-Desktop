@@ -1,140 +1,158 @@
-# DocumentaÁ„o do Compilador - Linguagem Compivara
+# Linguagem Capivara
 
-## IntroduÁ„o
+A **Linguagem Capivara** √© uma linguagem de programa√ß√£o simples e direta, desenvolvida para fins educativos. Ela tem uma sintaxe intuitiva, visando facilitar a compreens√£o dos conceitos de programa√ß√£o. A principal caracter√≠stica da linguagem √© a **case-sensitivity** para vari√°veis, ou seja, o nome de uma vari√°vel ser√° tratado de forma diferente dependendo de ser escrito em mai√∫sculas ou min√∫sculas.
 
-Este repositÛrio contÈm o cÛdigo-fonte de um compilador para uma linguagem customizada. A linguagem foi projetada para ser simples e eficiente, e o compilador permite a an·lise sint·tica, sem‚ntica e a compilaÁ„o do cÛdigo escrito nessa linguagem. O compilador suporta uma estrutura b·sica de tokens e uma an·lise sem‚ntica para garantir que o cÛdigo seja v·lido.
+> **Desenvolvedores:**
+*√çcaro Macedo*
+*Fabio Oliveira*
+*Guilherme Tadayuki*
 
-## 1. DescriÁ„o Detalhada da Linguagem Criada
+---
 
-### Sintaxe
+## 1. Introdu√ß√£o
 
-A sintaxe da linguagem customizada segue uma estrutura simples baseada em expressıes aritmÈticas e declaraÁıes de vari·veis. A seguir est„o os principais elementos sint·ticos da linguagem:
+A linguagem foi criada com o objetivo de proporcionar uma introdu√ß√£o f√°cil e clara aos conceitos de programa√ß√£o, sem complexidade excessiva. Seu design simples e a √™nfase na legibilidade a tornam ideal para iniciantes.
 
- - **Vari·veis**: Vari·veis s„o declaradas com o comando `let` seguido pelo nome da vari·vel e o valor inicial.
-  ```Copiar cÛdigo
-  let x = 10;
-  let y = 20;
-  ```
+---
 
- - **AtribuiÁ„o**: AtribuiÁ„o de valores a vari·veis È feita utilizando o operador =.
+## 2. Sintaxe
 
-```Copiar cÛdigo
-x = x + 5;
-y = y * 2;
-```
+### 2.1 Estruturas Condicionais e de Repeti√ß√£o
 
- - **OperaÁıes**: A linguagem suporta operaÁıes aritmÈticas b·sicas como soma, subtraÁ„o, multiplicaÁ„o e divis„o.
+#### `SE` (Condicional)
 
-```Copiar cÛdigo
-let z = x + y;
-let result = z * 3;
-```
+> Executa o bloco de c√≥digo se a condi√ß√£o for verdadeira.
 
- - **Coment·rios**: Coment·rios podem ser inseridos utilizando // para coment·rios de linha ˙nica.
+```SE CONDI√á√ÉO [BLOCO DE C√ìDIGO;]```
 
-```Copiar cÛdigo
-// Isto È um coment·rio
-```
+------------
+#### `SENAO`
+> Executa o bloco de c√≥digo alternativo caso a condi√ß√£o no se n√£o seja verdadeira.
 
- - **FunÁıes**: FunÁıes s„o declaradas utilizando a palavra-chave function, seguida pelo nome da funÁ„o e seus par‚metros. O bloco de cÛdigo da funÁ„o È envolvido por {}.
+```SENAO [BLOCO DE C√ìDIGO;]```
 
-```Copiar cÛdigo
-function soma(a, b) {
-    return a + b;
-}
-```
+------------
 
-### Sem‚ntica
-A sem‚ntica da linguagem envolve as regras que definem o comportamento dos comandos e expressıes. A linguagem suporta:
+#### `ENQUANTO`
+> Executa o bloco de c√≥digo em loop enquanto a condi√ß√£o for verdadeira.
 
- - **DeclaraÁ„o e InicializaÁ„o de Vari·veis**: Quando uma vari·vel È declarada, seu valor inicial È armazenado e pode ser alterado durante a execuÁ„o do programa.
+```ENQUANTO CONDI√á√ÉO [BLOCO DE C√ìDIGO;]```
 
- - **ExecuÁ„o Sequencial**: As instruÁıes s„o executadas de forma sequencial, com operaÁıes aritmÈticas avaliadas na ordem em que aparecem.
+### 2.1 Declara√ß√£o de Vari√°veis
+```TIPO NOME = VALOR;```
+> Declara uma vari√°vel com um tipo (como INTEIRO, FLUTUANTE), nome e valor inicial.
 
- - **Chamadas de FunÁ„o**: FunÁıes s„o chamadas com valores especÌficos para seus par‚metros e retornam um valor que pode ser utilizado em expressıes.
+### 2.2 Exibi√ß√£o de Valores
+```MOSTRE VARIAVEL;```
+> Exibe o valor da VARIAVEL na sa√≠da.
 
- - **AtribuiÁ„o**: O valor de uma vari·vel pode ser alterado atravÈs de atribuiÁıes subsequentes.
+### 2.3  Entrada de Dados
+```LEIA;``` ou ```VARIAVEL NOME = LEIA;```
+> L√™ um valor de entrada do usu√°rio.
+obs: pode ser usado ana atribui√ß√£o de vari√°vel.
 
+### 2.4  Opera√ß√µes Mat√©maticas
+```+, -, /, *```
+> Operadores para opera√ß√µes matem√°ticas.
 
-## 2. ExplicaÁ„o das Escolhas de Design e ImplementaÁıes Realizadas
-### Escolhas de Design
-O design da linguagem foi feito com o foco em simplicidade e clareza. As principais escolhas de design incluem:
+## 3. Exemplos de C√≥digo
 
- - **Sintaxe Minimalista**: A linguagem foi projetada para ter uma sintaxe simples, baseada em conceitos familiares, como vari·veis e operaÁıes aritmÈticas.
+### 3.1 Exemplo de Condicional
+```SE x > 10 [ MOSTRE x ]```
+```SENAO [MOSTRE 10;]```
+> Neste exemplo, a linguagem verifica se x √© maior que 10 e exibe o valor de acordo com a condi√ß√£o.
 
- - **An·lise Sem‚ntica**: O compilador realiza a verificaÁ„o sem‚ntica para garantir que n„o haja erros como a tentativa de uso de vari·veis n„o declaradas.
+### 3.2 Exemplo de Declara√ß√£o e Atribui√ß√£o
+```INTEIRO x = 5;```
+```FLUTUANTE y = 3.14;```
+```MOSTRE x;```
+```MOSTRE y;```
+> Declara duas vari√°veis, x como inteiro e y como flutuante, e exibe seus valores.
 
- - **Estrutura Modular**: O compilador foi dividido em mÛdulos, como o lexer (que realiza a an·lise lÈxica), o parser (respons·vel pela an·lise sint·tica) e o compilador (que realiza a transformaÁ„o do cÛdigo em um formato execut·vel).
-ImplementaÁ„o
+### 3.3 Exemplo de LEIA
+```INTEIRO idade = LEIA;```
+```MOSTRE idade;```
 
-### O compilador foi implementado com as seguintes fases principais:
+> L√™ um valor para a vari√°vel idade e exibe a mensagem com o valor inserido.
 
- - **An·lise LÈxica (Lexer)**: A an·lise lÈxica quebra o cÛdigo fonte em tokens, que s„o as menores unidades significativas, como palavras-chave, operadores e n˙meros.
+### 3.4 Exemplo de Opera√ß√µes
+```INTEIRO soma = 1 + 1;```
+```INTEIRO subtracao = 1 - 1;```
+```FLUTUANTE divisao = 1 / 0.5;```
+```FLUTUANTE multiplicacao = 2 * 5.6;```
 
- - **An·lise Sint·tica (Parser)**: O parser transforma os tokens em uma ·rvore de sintaxe abstrata (AST), representando a estrutura do cÛdigo.
-
- - **An·lise Sem‚ntica**: O compilador verifica se as expressıes est„o corretas semanticamente, como garantir que todas as vari·veis foram declaradas antes de seu uso.
-
- - **GeraÁ„o de CÛdigo**: O compilador gera um cÛdigo de saÌda que pode ser executado ou traduzido para outra linguagem.
-
-### Ferramentas Utilizadas
- - **C#**
- - **.NET 8.0** 
- - **Windows Form**
-
-## 3. InstruÁıes de Como Executar o Compilador
-
-#### Passos para Executar
- - Baixe o arquivo **.exe** e execute:
+> Opera√ß√µes matem√°ticas com valores inteiros e flutuantes.
 
 
-## 4. Exemplos de CÛdigo e Resultados Esperados
-### Exemplo 1: DeclaraÁ„o de Vari·veis
-#### CÛdigo Fonte:
+## 4. Casos de Sucesso
+### 4.1 Declara√ß√£o Correta de Vari√°veis
 
-```Copiar cÛdigo
-let x = 10;
-let y = 20;
-let z = x + y;
-```
+```INTEIRO numero = 10;```
+```FLUTUANTE valor = 5.5;```
+```MOSTRE numero;```
+```MOSTRE valor;```
+> As vari√°veis s√£o corretamente declaradas;
 
-Resultado Esperado:
-```Copiar cÛdigo
-CompilaÁ„o bem-sucedida!
-Resultado: z = 30
-```
+### 4.2 Condicional Funcional
+```SE idade >= 18 [MOSTRE idade;]```
+```SENAO [MOSTRE 0;]```
+> A condicional √© bem-sucedida e o bloco de c√≥digo correto √© executado.
 
-### Exemplo 2: FunÁıes
-#### CÛdigo Fonte:
+## 5. Casos de Erro
+### 5.1 Erro de Tipagem: Incompatibilidade entre Vari√°veis e Valores
+**Codigo: **
 
-```Copiar cÛdigo
-function soma(a, b) {
-    return a + b;
-}
+```INTEIRO idade = 5.5;```
 
-let resultado = soma(5, 3);
-```
+**Erro: **
 
-Resultado Esperado:
+```Erro sem√¢ntico: Tipo incompat√≠vel. Esperado INTEIRO, mas recebeu FLUTUANTE.```
+> O valor 5.5 n√£o pode ser atribu√≠do a uma vari√°vel do tipo INTEIRO.
 
-```Copiar cÛdigo
-CompilaÁ„o bem-sucedida!
-Resultado: resultado = 8
-```
+### 5.2 Erro de Sintaxe: Faltando Ponto e V√≠rgula
+**Codigo: **
 
-### Exemplo 3: Erro de Vari·vel N„o Declarada
+```INTEIRO x = 10```
+```MOSTRE x;```
 
-#### CÛdigo Fonte:
+**Erro: **
 
-```Copiar cÛdigo
-let x = 10;
-y = x + 5;  // Erro: 'y' n„o foi declarada
-```
+```Erro sint√°tico: Esperado ';' ap√≥s a declara√ß√£o de vari√°vel na linha 1.```
+>O comando LEIA deve ser utilizado com a atribui√ß√£o diretamente em uma vari√°vel.
 
-Resultado Esperado:
+### 5.3 Erro de Sintaxe: Faltando Ponto e V√≠rgula
 
-```Copiar cÛdigo
-Erro de compilaÁ„o: 'y' n„o foi declarada.
-```
-## Conclus„o
-Este compilador foi projetado para oferecer uma maneira simples de processar cÛdigo escrito em uma linguagem customizada. Embora ainda seja uma implementaÁ„o b·sica, ele pode ser estendido para suportar mais recursos, como tipos de dados mais complexos e operaÁıes avanÁadas.
+**Codigo: **
+
+```INTEIRO idade;```
+```idade = LEIA;```
+
+**Erro: **
+
+```Erro l√©xico: Esperado valor num√©rico ou vari√°vel ap√≥s o 'LEIA', mas recebeu tipo inv√°lido na linha 2.```
+> O comando LEIA deve ser utilizado com a atribui√ß√£o diretamente em uma vari√°vel.
+
+## 6. Tratamento de Erros
+### 6.1 Erro L√©xico
+Erros relacionados √† leitura de tokens inv√°lidos ou malformados, como palavras-chave incorretas ou uso de caracteres inesperados.
+
+**Exemplo:**
+```INTEIRO 1a = 5;```
+> Geraria um erro de token 1a inv√°lido.
+
+### 6.2 Erro Sint√°tico
+Erros no formato de express√£o ou na estrutura da linguagem, como a falta de ponto e v√≠rgula ou o uso incorreto de colchetes.
+
+**Exemplo:**
+```SE x > 10 MOSTRE x;```
+> Falta colchetes ao redor do bloco de c√≥digo.
+
+### 6.3 Erro Sem√¢ntico
+Erros no significado do c√≥digo, como tipos incompat√≠veis ou uso indevido de vari√°veis.
+
+**Exemplo:**
+```INTEIRO idade = 5.5;```
+> Tipo incompat√≠vel.
+
+## 7. Conclus√£o
+A Linguagem Capivara √© simples, eficiente e foi projetada para facilitar o aprendizado dos conceitos de programa√ß√£o. Sua sintaxe direta e o tratamento de erros contribuem para uma excelente experi√™ncia de desenvolvimento. Al√©m disso, o fato de ser case-sensitive para vari√°veis oferece um maior controle sobre o c√≥digo, o que pode ser uma boa introdu√ß√£o a conceitos mais avan√ßados.

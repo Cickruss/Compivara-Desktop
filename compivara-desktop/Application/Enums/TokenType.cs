@@ -3,7 +3,7 @@
 public enum TokenType
 {
     #region PALAVRAS CHAVES
-    IF, ELSE, WHILE, INT, FLOAT, PRINT, READ,
+    SE, SENAO, ENQUANTO, INTEIRO, FLUTUANTE, MOSTRE, LEIA, BOOLEANO, TRUE, FALSE,
     #endregion
 
     #region OPERADORES
@@ -12,12 +12,12 @@ public enum TokenType
     #endregion
 
     #region LITERIAS E IDENTIFICADORES
-    NUMERO, IDENTIFICADOR, 
+    NUMERO, IDENTIFICADOR,
     #endregion
 
     #region SIMBOLOS E PONTUAÇÕES
     PARENTESE_ESQUERDO, PARENTESE_DIREITO, 
-    CHAVE_ESQUERDA, CHAVE_DIREITA,
+    COLCHETE_ESQUERDO, COLCHETE_DIREITO,
     PONTO_E_VIRGULA,
     #endregion
     

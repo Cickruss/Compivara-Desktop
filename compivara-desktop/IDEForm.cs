@@ -18,7 +18,7 @@ public partial class IDEForm : Form
         {
             lstTokens.Items.Clear();
             
-            string sourceCode = txtCode.Text.ToLower();
+            string sourceCode = txtCode.Text;
             
             var result = _compilerService.Compile(sourceCode);
             
