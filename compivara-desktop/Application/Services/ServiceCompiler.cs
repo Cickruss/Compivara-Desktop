@@ -20,14 +20,12 @@ public class ServiceCompiler : IServiceCompiler
         var result = new CompilationResult();
         try 
         {
+            _serviceSemantic.Reset();
             _serviceLexer.AddSourceCode(sourceCode);
             var tokens = _serviceLexer.ScanTokens();
             
             _serviceParser.AddTokens(tokens);
             _serviceParser.Parse();
-
-            //var semanticAnalyzer = new SemanticAnalyzer();
-            
             
             result.Success = true;
             result.Tokens = tokens;

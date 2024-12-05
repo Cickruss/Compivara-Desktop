@@ -36,15 +36,15 @@
             
             this.txtCode.Location = new System.Drawing.Point(20, 40);
             this.txtCode.Multiline = true;
-            this.txtCode.Size = new System.Drawing.Size(540, 180);
+            this.txtCode.Size = new System.Drawing.Size(540, 140);
             this.txtCode.Font = new System.Drawing.Font("Roboto", 10);
             this.txtCode.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtCode.BackColor = System.Drawing.Color.FromArgb(50, 50, 50);
             this.txtCode.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.txtCode.BorderStyle = System.Windows.Forms.BorderStyle.None;
             
-            this.lblResultMessage.Location = new System.Drawing.Point(20, 230);
-            this.lblResultMessage.Size = new System.Drawing.Size(540, 30);
+            this.lblResultMessage.Location = new System.Drawing.Point(20, 200);
+            this.lblResultMessage.Size = new System.Drawing.Size(540, 40);
             this.lblResultMessage.Text = "Tokens";
             this.lblResultMessage.Font = new System.Drawing.Font("Roboto", 10);
             this.lblResultMessage.ForeColor = System.Drawing.Color.DimGray;

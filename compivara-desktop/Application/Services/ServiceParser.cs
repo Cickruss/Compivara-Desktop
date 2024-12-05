@@ -4,10 +4,13 @@ using compivara_desktop.Application.Ports.Services;
 
 namespace compivara_desktop.Application.Services;
 
-public class ServiceParser : IServiceParser
+public class ServiceParser(IServiceSemantic _semantic) : IServiceParser
 {
+    private readonly IServiceSemantic _semanticAnalyzer = _semantic;
+    
     private List<Token> _tokens;
     private int _current = 0;
+
     public void AddTokens(List<Token> tokens)
     {
         _tokens = tokens;
@@ -19,27 +22,30 @@ public class ServiceParser : IServiceParser
         while (!IsAtEnd())
         {
             ParseStatement();
-            _current++;
         }
     }
 
     private void ParseStatement()
     {
         if (Match(TokenType.PRINT)) ParsePrintStatement();
+        else if (Match(TokenType.READ)) ParseReadStatement();
         else if (Match(TokenType.IF)) ParseIfStatement();
         else if (Match(TokenType.WHILE)) ParseWhileStatement();
-        else if (Match(TokenType.INT, TokenType.FLOAT)) ParseVariableDeclaration();
+        else if (Match(TokenType.TYPE_INT, TokenType.TYPE_FLOAT)) ParseVariableDeclaration();
+        else if (Match(TokenType.IDENTIFICADOR)) ParseAssignmentStatement();
+        else throw new Exception($"Unexpected token: {Peek().Lexeme}");
     }
 
-    private void ParseVariableDeclaration()
+    private void ParsePrintStatement()
     {
-        // Implementação simplificada de declaração de variáveis
-        Consume(TokenType.IDENTIFICADOR, "Expect variable name");
-        if (Match(TokenType.IGUAL))
-        {
-            ParseExpression();
-        }
-        Consume(TokenType.PONTO_E_VIRGULA, "Expect ';' after variable declaration");
+        ParseExpression();
+        Consume(TokenType.PONTO_E_VIRGULA, "Expect ';' after print statement");
+    }
+
+    private void ParseReadStatement()
+    {
+        Consume(TokenType.IDENTIFICADOR, "Expect variable name after 'read'");
+        Consume(TokenType.PONTO_E_VIRGULA, "Expect ';' after read statement");
     }
 
     private void ParseIfStatement()
@@ -47,10 +53,10 @@ public class ServiceParser : IServiceParser
         Consume(TokenType.PARENTESE_ESQUERDO, "Expect '(' after 'if'");
         ParseExpression();
         Consume(TokenType.PARENTESE_DIREITO, "Expect ')' after condition");
-        ParseStatement();
+        ParseBlock();
         if (Match(TokenType.ELSE))
         {
-            ParseStatement();
+            ParseBlock();
         }
     }
 
@@ -59,27 +65,114 @@ public class ServiceParser : IServiceParser
         Consume(TokenType.PARENTESE_ESQUERDO, "Expect '(' after 'while'");
         ParseExpression();
         Consume(TokenType.PARENTESE_DIREITO, "Expect ')' after condition");
-        ParseStatement();
+        ParseBlock();
     }
 
-    private void ParsePrintStatement()
+    private void ParseVariableDeclaration()
     {
+        Token typeToken = Previous();
+        Token identifierToken = Peek();
+        
+        Consume(TokenType.IDENTIFICADOR, "Expect variable name");
+        if (Match(TokenType.IGUAL))
+        {
+            Token valueToken = Peek();
+            var literalType = valueToken.Literal is int ? DataType.Integer : DataType.Float;
+            if (valueToken.Type == TokenType.NUMERO)
+            {
+                switch (typeToken.Type)
+                {
+                    case TokenType.TYPE_INT:
+                        _semanticAnalyzer.VerifyTypeCompatibility(DataType.Integer, literalType, identifierToken.Lexeme, valueToken.Line);
+                        _semanticAnalyzer.AnalyzeVariableDeclaration(typeToken, identifierToken, valueToken);
+                        break;
+                    case TokenType.TYPE_FLOAT:
+                        _semanticAnalyzer.VerifyTypeCompatibility(DataType.Float, literalType, identifierToken.Lexeme, valueToken.Line);
+                        _semanticAnalyzer.AnalyzeVariableDeclaration(typeToken, identifierToken, valueToken);
+                        break;
+                }
+            }
+            ParseExpression();
+        }
+        Consume(TokenType.PONTO_E_VIRGULA, "Expect ';' after variable declaration.");
+    }
+    
+    private void ParseAssignmentStatement()
+    {
+        Token identifierToken = Previous();
+        
+        _semanticAnalyzer.AnalyzeVariableUsage(identifierToken);
+
+        Consume(TokenType.IGUAL, "Expect '=' after variable.");
+        
+        var declaredType = _semanticAnalyzer.GetVariableType(identifierToken);
+        
+        Token valueToken = Peek();
+        DataType valueType = DetermineValueType(valueToken);
+        
+        _semanticAnalyzer.VerifyTypeCompatibility(
+            declaredType,
+            valueType,
+            identifierToken.Lexeme,
+            valueToken.Line
+        );
+        
         ParseExpression();
-        Consume(TokenType.PONTO_E_VIRGULA, "Expect ';' after value");
+
+        Consume(TokenType.PONTO_E_VIRGULA, "Expect ';' after expression.");
+    }
+    
+    private DataType DetermineValueType(Token valueToken)
+    {
+        if (valueToken.Type == TokenType.NUMERO)
+        {
+            if (valueToken.Literal is int)
+            {
+                return DataType.Integer;
+            }
+            else if (valueToken.Literal is double)
+            {
+                return DataType.Float;
+            }
+        }
+
+        throw new Exception($"Unsupported value type for token '{valueToken.Lexeme}'");
     }
 
     private void ParseExpression()
     {
-        ParseArithmeticExpression();
+        ParseTerm();
+        while (Match(TokenType.ADICAO, TokenType.MENOS))
+        {
+            Previous();
+            ParseTerm();
+        }
     }
 
-    private void ParseArithmeticExpression()
+    private void ParseTerm()
     {
-        while (Match(TokenType.ADICAO, TokenType.MENOS, TokenType.MULTIPLICACAO, TokenType.DIVISAO))
+        ParseFactor();
+        while (Match(TokenType.MULTIPLICACAO, TokenType.DIVISAO))
         {
-            Token @operator = Previous();
-            ParseArithmeticExpression();
+            Previous();
+            ParseFactor();
         }
+    }
+
+    private void ParseFactor()
+    {
+        if (Match(TokenType.NUMERO)) return;
+        throw new Exception("Expected number");
+    }
+
+    private void ParseBlock()
+    {
+        Consume(TokenType.COLCHETE_ESQUERDO, "Expect '[' before block code");
+        while (!Check(TokenType.COLCHETE_DIREITO) && !IsAtEnd())
+        {
+            ParseStatement();
+        }
+        Consume(TokenType.COLCHETE_DIREITO, "Expect ']' after block");
     }
 
     private bool Match(params TokenType[] types)
@@ -109,11 +202,9 @@ public class ServiceParser : IServiceParser
 
     private bool IsAtEnd()
     {
-        var typeCurrent = Peek().Type;
-        var typeFinal = TokenType.EOF;
-        
-        return typeCurrent == typeFinal ? true : false; 
+        return Peek().Type == TokenType.EOF;
     }
+
     private Token Peek() => _tokens[_current];
     private Token Previous() => _tokens[_current - 1];
 
