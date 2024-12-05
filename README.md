@@ -3,9 +3,7 @@
 A **Linguagem Capivara** é uma linguagem de programação simples e direta, desenvolvida para fins educativos. Ela tem uma sintaxe intuitiva, visando facilitar a compreensão dos conceitos de programação. A principal característica da linguagem é a **case-sensitivity** para variáveis, ou seja, o nome de uma variável será tratado de forma diferente dependendo de ser escrito em maiúsculas ou minúsculas.
 
 > **Desenvolvedores:**
-*Ícaro Macedo*
-*Fabio Oliveira*
-*Guilherme Tadayuki*
+*Ícaro Macedo*, *Fabio Oliveira*, *Guilherme Tadayuki*
 
 ---
 
