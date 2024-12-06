@@ -155,3 +155,9 @@ Erros no significado do código, como tipos incompatíveis ou uso indevido de va
 
 ## 7. Conclusão
 A Linguagem Capivara é simples, eficiente e foi projetada para facilitar o aprendizado dos conceitos de programação. Sua sintaxe direta e o tratamento de erros contribuem para uma excelente experiência de desenvolvimento. Além disso, o fato de ser case-sensitive para variáveis oferece um maior controle sobre o código, o que pode ser uma boa introdução a conceitos mais avançados.
+
+## 8. Referencias
+- https://sites.icmc.usp.br/delamaro/SlidesCompiladores/aula12-Cap9.pdf
+- https://www.youtube.com/watch?v=FmR3p1-tzoc
+- https://www.youtube.com/watch?v=puQFob7e7To
+- https://www.youtube.com/watch?v=puQFob7e7To
