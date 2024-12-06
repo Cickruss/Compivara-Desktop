@@ -11,6 +11,7 @@
 
         private void InitializeComponent()
         {
+            //this.Icon = new Icon("Resouces/capivara.ico");
             this.txtCode = new System.Windows.Forms.TextBox();
             this.lblCodMessage = new System.Windows.Forms.Label();
             this.lblResultMessage = new System.Windows.Forms.Label();

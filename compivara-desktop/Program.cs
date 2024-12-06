@@ -9,6 +9,7 @@ static class Program
     [STAThread]
     static void Main()
     {
+        
         var serviceProvider = new ServiceCollection()
             .AddSingleton<IServiceLexer, ServiceLexer>()
             .AddSingleton<IServiceParser, ServiceParser>()
