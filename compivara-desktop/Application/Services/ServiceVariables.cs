@@ -13,7 +13,7 @@ public class ServiceVariables : IServiceVariables
         _variables.Clear();
     }
 
-    public void AnalyzeVariableDeclaration(Token typeToken, Token identifierToken, Token valueToken)
+    public void AnalyzeVariableDeclaration(Token typeToken, Token identifierToken)
     {
         DataType type = typeToken.Type == TokenType.INTEIRO ? DataType.Integer : DataType.Float;
 
@@ -22,7 +22,7 @@ public class ServiceVariables : IServiceVariables
             throw new Exception($"Variável '{identifierToken.Lexeme}' já declarada");
         }
 
-        _variables.Add(new Variables { Name = identifierToken.Lexeme, Type = type, Value = valueToken.Lexeme });
+        _variables.Add(new Variables { Name = identifierToken.Lexeme, Type = type});
     }
     public void AnalyzeVariableUsage(Token identifierToken)
     {

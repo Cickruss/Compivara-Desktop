@@ -5,7 +5,7 @@ namespace compivara_desktop.Application.Ports.Services;
 
 public interface IServiceVariables
 {
-    public void AnalyzeVariableDeclaration(Token typeToken, Token identifierToken, Token ValueToken);
+    public void AnalyzeVariableDeclaration(Token typeToken, Token identifierToken);
 
     public void AnalyzeVariableUsage(Token token);
 

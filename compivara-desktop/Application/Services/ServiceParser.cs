@@ -81,12 +81,25 @@ public class ServiceParser(IServiceVariables variables) : IServiceParser
         if (Match(TokenType.IGUAL))
         {
             Token valueToken = Peek();
-            var literalType = valueToken.Literal is int ? DataType.Integer : DataType.Float;
-            if (valueToken.Type == TokenType.NUMERO && typeToken.Type == TokenType.INTEIRO)
+
+            if (valueToken.Type == TokenType.NUMERO)
             {
-                _variablesService.VerifyTypeCompatibility(DataType.Integer, literalType, identifierToken.Lexeme, valueToken.Line);
-                _variablesService.AnalyzeVariableDeclaration(typeToken, identifierToken, valueToken);
+                DataType literalType = valueToken.Literal is int ? DataType.Integer : DataType.Float;
+
+                switch (typeToken.Type)
+                {
+                    case TokenType.INTEIRO:
+                        _variablesService.VerifyTypeCompatibility(DataType.Integer, literalType, identifierToken.Lexeme, valueToken.Line);
+                        break;
+                } //filtro de possiveis adições de tipos computacionais
+                
+                _variablesService.AnalyzeVariableDeclaration(typeToken, identifierToken);
             }
+            else if (valueToken.Type == TokenType.LEIA)
+            {
+                _variablesService.AnalyzeVariableDeclaration(typeToken, identifierToken);
+            }
+            
             ParseExpression();
         }
         Consume(TokenType.PONTO_E_VIRGULA, "Esperado ';' após a declaração da variável");
@@ -95,18 +108,21 @@ public class ServiceParser(IServiceVariables variables) : IServiceParser
     {
         Token identifierToken = Previous();
         
+        
         _variablesService.AnalyzeVariableUsage(identifierToken);
         Consume(TokenType.IGUAL, "Esperado '=' após o nome da variável");
         
         Token valueToken = Peek();
-
+        DataType valueType = new();
+        
         if (Match(TokenType.LEIA))
         {
+            valueType = DataType.Integer;
             Consume(TokenType.PONTO_E_VIRGULA, "Esperado ';' após 'leia'");
         }
         else
         {
-            DataType valueType = DetermineValueType(valueToken);
+            valueType = DetermineValueType(valueToken);
             var declaredType = _variablesService.GetVariableType(identifierToken);
             
             _variablesService.VerifyTypeCompatibility(
