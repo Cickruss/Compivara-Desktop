@@ -56,16 +56,14 @@ obs: pode ser usado ana atribuição de variável.
 ## 3. Exemplos de Código
 
 ### 3.1 Exemplo de Condicional
-```SE x > 10 [ MOSTRE x ]```
+```SE x > 10 [ MOSTRE x; ]```
 ```SENAO [MOSTRE 10;]```
 > Neste exemplo, a linguagem verifica se x é maior que 10 e exibe o valor de acordo com a condição.
 
 ### 3.2 Exemplo de Declaração e Atribuição
 ```INTEIRO x = 5;```
 ```FLUTUANTE y = 3.14;```
-```MOSTRE x;```
-```MOSTRE y;```
-> Declara duas variáveis, x como inteiro e y como flutuante, e exibe seus valores.
+> Declara duas variáveis, x como inteiro e y como flutuante.
 
 ### 3.3 Exemplo de LEIA
 ```INTEIRO idade = LEIA;```
@@ -92,63 +90,66 @@ obs: pode ser usado ana atribuição de variável.
 > As variáveis são corretamente declaradas;
 
 ### 4.2 Condicional Funcional
-```SE idade >= 18 [MOSTRE idade;]```
+```INTEIRO idade = 18;```
+```SE idade > 17 [MOSTRE idade;]```
 ```SENAO [MOSTRE 0;]```
 > A condicional é bem-sucedida e o bloco de código correto é executado.
 
 ## 5. Casos de Erro
 ### 5.1 Erro de Tipagem: Incompatibilidade entre Variáveis e Valores
-**Codigo: **
+##### Codigo:
 
 ```INTEIRO idade = 5.5;```
 
-**Erro: **
+##### Erro:
 
-```Erro semântico: Tipo incompatível. Esperado INTEIRO, mas recebeu FLUTUANTE.```
+`Incompatibilidade de tipo: A variável 'idade' é do tipo Integer,
+mas o valor atribuído é do tipo Float na linha 1`
+
 > O valor 5.5 não pode ser atribuído a uma variável do tipo INTEIRO.
 
 ### 5.2 Erro de Sintaxe: Faltando Ponto e Vírgula
-**Codigo: **
+##### Codigo:
 
 ```INTEIRO x = 10```
 ```MOSTRE x;```
 
-**Erro: **
+##### Erro:
 
-```Erro sintático: Esperado ';' após a declaração de variável na linha 1.```
+`Esperado ';' após a declaração da variável na linha 1`
 >O comando LEIA deve ser utilizado com a atribuição diretamente em uma variável.
 
-### 5.3 Erro de Sintaxe: Faltando Ponto e Vírgula
+### 5.3 Erro de Semantica: Variavél não declarada está sendo usada
 
-**Codigo: **
+##### Codigo:
 
-```INTEIRO idade;```
-```idade = LEIA;```
+`SE idade > 17
+[MOSTRE idade;]`
 
-**Erro: **
+##### Erro:
 
-```Erro léxico: Esperado valor numérico ou variável após o 'LEIA', mas recebeu tipo inválido na linha 2.```
-> O comando LEIA deve ser utilizado com a atribuição diretamente em uma variável.
+`Variável 'idade' nao declarada na linha 2`
+> Está tentando utilizar uma variavel que não foi declarada em uma condição.
 
 ## 6. Tratamento de Erros
 ### 6.1 Erro Léxico
 Erros relacionados à leitura de tokens inválidos ou malformados, como palavras-chave incorretas ou uso de caracteres inesperados.
 
-**Exemplo:**
+##### Exemplo:
 ```INTEIRO 1a = 5;```
 > Geraria um erro de token 1a inválido.
 
 ### 6.2 Erro Sintático
 Erros no formato de expressão ou na estrutura da linguagem, como a falta de ponto e vírgula ou o uso incorreto de colchetes.
 
-**Exemplo:**
+##### Exemplo:
 ```SE x > 10 MOSTRE x;```
 > Falta colchetes ao redor do bloco de código.
 
 ### 6.3 Erro Semântico
 Erros no significado do código, como tipos incompatíveis ou uso indevido de variáveis.
 
-**Exemplo:**
+##### Exemplo:
 ```INTEIRO idade = 5.5;```
 > Tipo incompatível.
 
